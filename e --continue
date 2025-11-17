@@ -1,0 +1,153 @@
+[33mcommit 704bac6fbf8ed7af3ccafaa518702c4609c539c9[m
+Author: Nischal <nischalshrestha800@gmail.com>
+Date:   Thu Mar 6 11:44:15 2025 +0545
+
+    commitments installment update solved
+
+[1mdiff --git a/adminpmt-Falgun-20.zip b/adminpmt-Falgun-20.zip[m
+[1mdeleted file mode 100644[m
+[1mindex 1facba0..0000000[m
+Binary files a/adminpmt-Falgun-20.zip and /dev/null differ
+[1mdiff --git a/app/Http/Controllers/CommitmentController.php b/app/Http/Controllers/CommitmentController.php[m
+[1mindex 5dfedd9..71f70c4 100644[m
+[1m--- a/app/Http/Controllers/CommitmentController.php[m
+[1m+++ b/app/Http/Controllers/CommitmentController.php[m
+[36m@@ -708,7 +708,6 @@[m [mpublic function markAsPaid($installmentId)[m
+ [m
+ [m
+ [m
+[31m-[m
+     public function update(Request $request, $id)[m
+     {[m
+         // Validate the request[m
+[36m@@ -731,16 +730,12 @@[m [mpublic function update(Request $request, $id)[m
+         $paidAmount = $request->input('paid_amount', 0);[m
+         $pending_amount = $totalAmount - $paidAmount;[m
+ [m
+[31m-        // Store previous values before updating[m
+[31m-        // $previousPaidAmount = $commitment->paid_amount;[m
+[31m-        // $previousStatus = $commitment->status;[m
+[31m-[m
+         // Update the commitment fields[m
+         $commitment->update([[m
+             'name' => $request->input('name'),[m
+             'department' => $request->input('department'),[m
+             'agent_id' => $request->input('agent_id'),[m
+[31m-            'client_id' => $request->input('client_id'), // Add this line[m
+[32m+[m[32m            'client_id' => $request->input('client_id'),[m
+             'total_amount' => $totalAmount,[m
+             'paid_amount' => $paidAmount,[m
+             'pending_amount' => $pending_amount,[m
+[36m@@ -749,73 +744,95 @@[m [mpublic function update(Request $request, $id)[m
+             'remarks' => $request->input('remarks'),[m
+         ]);[m
+ [m
+[31m-        // Handling installments and transaction creation[m
+[31m-        if ($request->has('installments')) {[m
+[31m-            if (!is_array($request->installments)) {[m
+[31m-                return redirect()->back()->with('error', 'Invalid installments format.');[m
+[31m-            }[m
+[32m+[m[32m        // Handling installments updates[m
+[32m+[m[32m        // if ($request->has('installments')) {[m
+[32m+[m[32m        //     if (!is_array($request->installments)) {[m
+[32m+[m[32m        //         return redirect()->back()->with('error', 'Invalid installments format.');[m
+[32m+[m[32m        //     }[m
+[32m+[m
+[32m+[m[32m        //     $pending = false;[m
+[32m+[m[32m        //     $overdue = false;[m
+[32m+[m
+[32m+[m[32m        //     foreach ($request->installments as $installmentData) {[m
+[32m+[m[32m        //         if (!isset($installmentData['id'], $installmentData['amount'], $installmentData['due_date'], $installmentData['status'])) {[m
+[32m+[m[32m        //             continue;[m
+[32m+[m[32m        //         }[m
+[32m+[m
+[32m+[m[32m        //         // Update existing installment instead of creating new ones[m
+[32m+[m[32m        //         $installment = $commitment->installments()[m
+[32m+[m[32m        //             ->where('id', $installmentData['id'])[m
+[32m+[m[32m        //             ->first();[m
+[32m+[m
+[32m+[m[32m        //         if ($installment) {[m
+[32m+[m[32m        //             $installment->update([[m
+[32m+[m[32m        //                 'amount' => $installmentData['amount'],[m
+[32m+[m[32m        //                 'due_date' => $installmentData['due_date'],[m
+[32m+[m[32m        //                 'status' => $installmentData['status'],[m
+[32m+[m[32m        //             ]);[m
+[32m+[m
+[32m+[m[32m        //             // Status checking[m
+[32m+[m[32m        //             if ($installmentData['status'] === 'Pending' && !$pending && !$overdue) {[m
+[32m+[m[32m        //                 $pending = true;[m
+[32m+[m[32m        //             }[m
+[32m+[m[32m        //             if ($installmentData['status'] === 'Overdue' && !$overdue) {[m
+[32m+[m[32m        //                 $overdue = true;[m
+[32m+[m[32m        //                 $commitment->status = 'Overdue';[m
+[32m+[m[32m        //             }[m
+[32m+[m[32m        //         }[m
+[32m+[m[32m        //     }[m
+[32m+[m
+[32m+[m[32m        //     // Update commitment status based on installments[m
+[32m+[m[32m        //     if ($pending && !$overdue) {[m
+[32m+[m[32m        //         $commitment->status = 'Pending';[m
+[32m+[m[32m        //     } elseif (!$pending && !$overdue) {[m
+[32m+[m[32m        //         $commitment->status = 'Complete';[m
+[32m+[m[32m        //     }[m
+[32m+[m
+[32m+[m[32m        //     $commitment->save();[m
+[32m+[m[32m        // }[m
+ [m
+[31m-            // Delete existing installments and process new ones[m
+[31m-            $commitment->installments()->delete();[m
+[32m+[m[32m        // $this->updateData();[m
+[32m+[m
+[32m+[m[32m        // return redirect()->back()->with('success', 'Commitment updated successfully!');[m
+[32m+[m
+[32m+[m[32m        if ($request->has('installments')) {[m
+[32m+[m[32m            $submittedIds = collect($request->installments)->pluck('id')->filter()->all();[m
+[32m+[m[32m            $commitment->installments()->whereNotIn('id', $submittedIds)->delete(); // Delete missing[m
+ [m
+             $pending = false;[m
+             $overdue = false;[m
+ [m
+             foreach ($request->installments as $installmentData) {[m
+[31m-                if (!isset($installmentData['amount'], $installmentData['due_date'], $installmentData['status'])) {[m
+[31m-                    continue;[m
+[31m-                }[m
+[31m-[m
+[31m-                // Insert new installments[m
+[31m-                $installment = $commitment->installments()->create([[m
+[32m+[m[32m                $data = [[m
+                     'amount' => $installmentData['amount'],[m
+                     'due_date' => $installmentData['due_date'],[m
+                     'status' => $installmentData['status'],[m
+[31m-                    'commitment_id' => $commitment->id,[m
+[31m-                ]);[m
+[32m+[m[32m                ];[m
+ [m
+[31m-                // Transaction creation based on installment status[m
+[31m-                // if ($installmentData['status'] == 'Complete') {[m
+[31m-                //     // Create a transaction for this installment amount when it's marked complete[m
+[31m-                //     Transactions::create([[m
+[31m-                //         'pc_id' => $commitment->id,[m
+[31m-                //         'type' => 'commitment',[m
+[31m-                //         'installment_id' => $installment->id,[m
+[31m-                //         'client_id' => $commitment->client_id,[m
+[31m-                //         'agent_id' => $commitment->agent_id,[m
+[31m-                //         'pay_amount' => $installmentData['amount'],[m
+[31m-                //         'login_uid' => Auth::id(),[m
+[31m-                //         'remarks' => $request->input('remarks', 'Installment payment completed'),[m
+[31m-                //         'created_at' => now(),[m
+[31m-                //     ]);[m
+[31m-                // }[m
+[31m-[m
+[31m-[m
+[31m-                if ($installmentData['status'] == 'Pending' && !$pending && !$overdue) {[m
+[31m-                    $pending = true;[m
+[32m+[m[32m                if (isset($installmentData['id']) && $installment = $commitment->installments()->find($installmentData['id'])) {[m
+[32m+[m[32m                    $installment->update($data);[m
+[32m+[m[32m                } else {[m
+[32m+[m[32m                    $commitment->installments()->create($data); // Create new[m
+                 }[m
+[31m-                if ($installmentData['status'] == 'Overdue' && !$overdue) {[m
+[31m-                    $overdue = true;[m
+[31m-                    $commitment->status = 'Overdue';[m
+[31m-                }[m
+[31m-

@@ -1,0 +1,320 @@
+ .menu-link {
+                        color: inherit;
+                        /* Keep text color default */
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        text-decoration: none;
+                        padding: 8px;
+                    }
+
+                    .menu-link i {
+                        transition: color 0.3s ease-in-out;
+                    }
+
+                    /* Change icon color on hover */
+                    .menu-link:hover i {
+                        color: white !important;
+                    }
+
+                    /* Active link styling */
+                    .active .menu-link {
+                        color: white !important;
+                    }
+
+                    .active .menu-link i {
+                        color: white !important;
+                    }
+
+
+
+                      /* Dropdown Container */
+                        #messagesDropdownContainer {
+                            position: relative;
+                        }
+
+                        /* Notification Icon */
+                        .messages-toggle {
+                            position: relative;
+                            color: #fff;
+                            font-size: 18px;
+                            padding: 10px;
+                            transition: all 0.3s ease-in-out;
+                        }
+
+                        /* Notification Badge */
+                        .messages-toggle .badge {
+                            position: absolute;
+                            top: 5px;
+                            right: 5px;
+                            background: #ff5a5a;
+                            color: #fff;
+                            font-size: 12px;
+                            padding: 4px 7px;
+                            border-radius: 50%;
+                        }
+
+                        /* Dropdown Menu */
+                        .dropdown-menu.messages {
+                            width: 300px;
+                            border-radius: 8px;
+                            overflow: hidden;
+                            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                            padding: 5px 0;
+                        }
+
+                        /* Commitment Item */
+                        .dropdown-item.message {
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+                            padding: 10px 15px;
+                            border-bottom: 1px solid #f1f1f1;
+                            transition: background 0.3s ease-in-out;
+                        }
+
+                        .dropdown-item.message:hover {
+                            background: #f8f9fa;
+                        }
+
+                        /* Status Dot */
+                        .status-dot {
+                            width: 10px;
+                            height: 10px;
+                            border-radius: 50%;
+                            flex-shrink: 0;
+                        }
+
+                        .status-complete {
+                            background: #28a745;
+                            /* Green */
+                        }
+
+                        .status-pending {
+                            background: #dc3545;
+                            /* Red */
+                        }
+
+                        .status-other {
+                            background: #6c757d;
+                            /* Gray */
+                        }
+
+                        /* Commitment Content */
+                        .content {
+                            display: flex;
+                            flex-direction: column;
+                        }
+
+                        .content strong {
+                            font-size: 14px;
+                            color: #333;
+                        }
+
+                        .content span {
+                            font-size: 12px;
+                            color: #555;
+                        }
+
+                        .content small {
+                            font-size: 10px;
+                            color: #888;
+                        }
+
+                        /* View All Commitments */
+                        .text-center.message {
+                            font-weight: bold;
+                            padding: 10px;
+                            background: #f8f9fa;
+                            text-align: center;
+                            color: #007bff;
+                            border-radius: 0 0 8px 8px;
+                            display: block;
+                        }
+
+                        .text-center.message:hover {
+                            background: #e2e6ea;
+                        }
+
+ .fixed-top {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+
+    /* .navbar {
+        background-color: #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 10px 20px;
+    } */
+
+    /* body {
+        padding-top: 70px;
+    } */
+
+    #global-loader {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        display: none;
+        /* Hidden by default */
+    }
+
+    .loader {
+        border: 6px solid #f3f3f3;
+        border-top: 6px solid #3498db;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+
+    .btn-group .btn {
+        color: #212529;
+        background-color: #e6e3de;
+        border-color: #f0ad4e;
+    }
+
+    /* .btn-group {
+        display: inline-flex;
+        gap: 5px;
+    } */
+
+    /* body {
+        background-color: #121212;
+    } */
+
+     /* Ensure the sidebar is full height and sticky */
+    .custom-alert {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1050;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+        border-radius: 5px;
+        padding: 20px;
+        max-width: 300px;
+        opacity: 0;
+        transform: translateX(100%);
+        transition: all 0.5s ease-out;
+    }
+
+    .custom-alert.fade-in {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .custom-alert.fade-out {
+        opacity: 0;
+        transform: translateX(100%);
+        transition: all 0.5s ease-in;
+    }
+
+    .alert strong {
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    .close {
+        font-size: 1.2rem;
+    }
+
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Sidebar styles */
+    .sidebar {
+        width: 250px;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #343a40;
+        color: white;
+        padding-top: 20px;
+    }
+
+    .sidebar .sidebar-header {
+        padding: 20px;
+        text-align: center;
+    }
+
+    .sidebar .nav-item {
+        width: 100%;
+    }
+
+    .sidebar .nav-link {
+        padding: 10px 20px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+    }
+
+    .sidebar .nav-link:hover {
+        background-color: #495057;
+    }
+
+    .sidebar .collapse {
+        display: none;
+    }
+
+    .sidebar .collapse.show {
+        display: block;
+    }
+
+    .sidebar .pl-3 {
+        padding-left: 30px;
+    }
+
+    /* Main Content Styling */
+    .main-content {
+        margin-left: 250px;
+        padding: 20px;
+        min-height: 100vh;
+        /* Ensure the main content area takes full screen */
+    }
+
+    /* Footer Styles */
+    .footer {
+        background-color: #343a40;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        position: relative;
+        bottom: 0;
+        width: 100%;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .sidebar {
+            width: 100%;
+            position: relative;
+            height: auto;
+        }
+
+        .main-content {
+            margin-left: 0;
+        }
+    }
