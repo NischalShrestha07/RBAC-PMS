@@ -28,7 +28,7 @@ Route::group(['middleware' => 'admin.guest'], function () {
 // ======================== AUTH PROTECTED ROUTES ========================
 Route::middleware(['auth'])->group(function () {
     // Unified Dashboard Route - MUST BE DEFINED FIRST
-    Route::get('/dashboard', [UserController::class, 'unifiedDashboard'])
+    Route::get('/dashboard', [UserController::class, 'dynamicDashboard'])
         ->name('dashboard.unified')
         ->middleware([CheckDashboardAccess::class]);
 
