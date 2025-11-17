@@ -1,4 +1,4 @@
-@extends('layouts.superApp', ['page' => 'Edit Commitment'])
+@extends('layouts.app', ['page' => 'Edit Commitment'])
 
 
 @section('content')

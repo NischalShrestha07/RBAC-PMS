@@ -1,4 +1,4 @@
-@extends('layouts.superApp',['page'=>'ChequeLocation'])
+@extends('layouts.app',['page'=>'ChequeLocation'])
 
 @section('content')
 <!-- Header Section -->

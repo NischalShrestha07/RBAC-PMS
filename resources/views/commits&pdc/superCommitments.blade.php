@@ -1,4 +1,4 @@
-@extends('layouts.superApp', ['page' => 'Commitments'])
+@extends('layouts.app', ['page' => 'Commitments'])
 
 @section('content')
 <section class="content-header py-2">

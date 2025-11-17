@@ -1,4 +1,4 @@
-@extends('layouts.superApp', ['page' => 'Installments'])
+@extends('layouts.app', ['page' => 'Installments'])
 
 @section('content')
 <section class="content-header py-2">

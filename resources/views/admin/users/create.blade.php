@@ -1,4 +1,4 @@
-@extends('layouts.superApp',['page'=>'Create User'])
+@extends('layouts.app',['page'=>'Create User'])
 
 @section('content')
 <div class="container-fluid">

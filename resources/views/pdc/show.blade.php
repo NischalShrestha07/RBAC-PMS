@@ -1,4 +1,4 @@
-@extends('layouts.superApp',['page' => 'Pdcs'])
+@extends('layouts.app',['page' => 'Pdcs'])
 
 @section('customCss')
 <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">

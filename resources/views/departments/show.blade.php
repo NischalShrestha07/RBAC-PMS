@@ -1,4 +1,4 @@
-@extends('layouts.superApp',['page'=>'View Departments'])
+@extends('layouts.app',['page'=>'View Departments'])
 
 @section('content')
 <div class="container-fluid">

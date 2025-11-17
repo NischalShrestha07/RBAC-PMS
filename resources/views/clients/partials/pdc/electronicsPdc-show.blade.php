@@ -1,4 +1,4 @@
-@extends('layouts.superApp',['page' => 'View Pdcs'])
+@extends('layouts.app',['page' => 'View Pdcs'])
 
 @section('content')
 <div class="page-content">

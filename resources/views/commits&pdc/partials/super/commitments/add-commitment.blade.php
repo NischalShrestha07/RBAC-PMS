@@ -1,4 +1,4 @@
-@extends('layouts.superApp', ['page' => 'Create Commitment'])
+@extends('layouts.app', ['page' => 'Create Commitment'])
 
 @section('content')
 <section class="content-header">
