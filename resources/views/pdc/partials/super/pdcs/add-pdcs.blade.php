@@ -1,4 +1,4 @@
-@extends('layouts.superApp', ['page' => 'Create Pdc'])
+@extends('layouts.app', ['page' => 'Create Pdc'])
 
 
 @section('content')

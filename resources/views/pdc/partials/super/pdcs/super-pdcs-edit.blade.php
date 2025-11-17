@@ -1,4 +1,4 @@
-@extends('layouts.superApp', ['page' => 'Edit PDC'])
+@extends('layouts.app', ['page' => 'Edit PDC'])
 
 @section('customCss')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">

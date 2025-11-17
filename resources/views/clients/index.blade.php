@@ -1,4 +1,4 @@
-@extends('layouts.superApp', ['page' => 'Clients'])
+@extends('layouts.app', ['page' => 'Clients'])
 
 @section('content')
 <section class="content-header d-flex gap-3 justify-content-between">

@@ -1,4 +1,4 @@
-@extends('layouts.superApp', ['page' => 'Profile'])
+@extends('layouts.app', ['page' => 'Profile'])
 
 @section('content')
 <div class="">

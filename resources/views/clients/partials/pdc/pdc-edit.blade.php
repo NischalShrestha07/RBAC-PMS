@@ -1,4 +1,4 @@
-@extends('layouts.superApp', ['page' => 'Edit Pdc'])
+@extends('layouts.app', ['page' => 'Edit Pdc'])
 
 
 @section('content')

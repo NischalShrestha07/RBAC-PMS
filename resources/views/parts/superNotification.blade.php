@@ -1,4 +1,4 @@
-@extends('layouts.superApp', ['page' => 'Notifications'])
+@extends('layouts.app', ['page' => 'Notifications'])
 
 @section('content')
 <div class="py-2">

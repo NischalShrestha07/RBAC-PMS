@@ -1,4 +1,4 @@
-@extends('layouts.superApp', ['page' => 'Edit Cheque Location'])
+@extends('layouts.app', ['page' => 'Edit Cheque Location'])
 
 @section('content')
 <div class="card border-0 shadow-lg rounded-3">

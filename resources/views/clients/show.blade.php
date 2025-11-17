@@ -1,4 +1,4 @@
-@extends('layouts.superApp', ['page' => 'View Clients'])
+@extends('layouts.app', ['page' => 'View Clients'])
 
 @section('content')
 <section class="content-header">

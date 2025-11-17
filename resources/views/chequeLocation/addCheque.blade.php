@@ -1,4 +1,4 @@
-@extends('layouts.superApp',['page'=>'Add ChequeLocation'])
+@extends('layouts.app',['page'=>'Add ChequeLocation'])
 
 @section('content')
 <section class="content-header d-flex gap-3 justify-content-between">

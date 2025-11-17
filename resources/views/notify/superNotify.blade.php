@@ -1,4 +1,4 @@
-@extends('layouts.superApp')
+@extends('layouts.app')
 
 @section('customCss')
 <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
