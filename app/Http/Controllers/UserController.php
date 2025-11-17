@@ -293,7 +293,7 @@ class UserController extends Controller
     /**
      * Unified Dashboard for ALL roles - Single View
      */
-    public function unifiedDashboard()
+    public function dynamicDashboard()
     {
         $this->authorize('view dashboard');
 
@@ -457,7 +457,7 @@ class UserController extends Controller
         // Get dashboard data based on user's permissions
         $dashboardData = $this->getPermissionBasedDashboardData($user);
 
-        return view('dashboard.unified', compact(
+        return view('dashboard.dynamic', compact(
             'user',
             'notifications',
             'menu',

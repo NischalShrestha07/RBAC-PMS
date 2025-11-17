@@ -155,25 +155,6 @@
                     @endif
                 </ul>
             </div>
-
-            <footer class="p-2 text-center text-muted border-top small company-name">
-                <small>© 2025 PMS.</small>
-                <div>By
-                    <a href="https://itservicenepal.com?ref=pallavipms" target="_blank"
-                        class="text-decoration-none fw-semibold company-name">
-                        IT Service Nepal
-                    </a>
-                </div>
-            </footer>
-            <footer class="p-2 company-short d-none text-center text-muted border-top small company-name">
-                <small>© 2025.</small>
-                <div>By
-                    <a href="https://itservicenepal.com?ref=pallavipms" target="_blank"
-                        class="text-decoration-none fw-bold">
-                        ITSN
-                    </a>
-                </div>
-            </footer>
         </nav>
 
         <main class="px-4 pb-4 w-100" style="height:100dvh; overflow:auto;">

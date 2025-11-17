@@ -65,12 +65,7 @@
 
             </div>
         </div>
-        <div class="copyrights text-center">
-            <p>&copy; 2025 Payment Management System. All rights reserved.</p>
-            <p>Designed By <a href="https://itservicenepal.com?ref=pallavipms" target="_blank"
-                    class="text-decoration-none fw-semibold">IT Service
-                    Nepal</a></p>
-        </div>
+
 </div>
 
 
