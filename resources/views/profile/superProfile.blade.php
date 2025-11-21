@@ -41,54 +41,63 @@
     </section>
 
     <section class="content">
-        <div class="row">
+        <div class="row g-4">
             <!-- Profile Sidebar -->
             <div class="col-md-3">
-                <div class="card border-0 shadow-lg rounded-3">
+                <div class="card border-0 shadow-sm rounded-3">
                     <div class="card-body text-center p-4">
                         <img src="{{ $user->image ? asset('uploads/images/' . $user->image) : asset('admincss/dist/img/avatar.png') }}"
-                            alt="User image" class="img-fluid rounded-circle mb-3"
-                            style="width: 120px; height: 120px; object-fit: cover;">
-                        <h5 class="card-title fw-bold">{{ $user->name }}</h5>
-                        <p class="text-muted mb-0">{{ ucfirst($user->role) }}</p>
+                            alt="User image" class="rounded-circle img-fluid mb-3"
+                            style="width:120px; height:120px; object-fit:cover;">
+                        <h5 class="fw-bold">{{ $user->name }}</h5>
+                        <p class="text-muted">{{ ucfirst($user->role) }}</p>
                     </div>
                 </div>
-            </div>
 
-            <div class="card mt-4">
-                <div class="card-header">
-                    <h5>Two-Factor Authentication</h5>
-                </div>
-                <div class="card-body">
-                    @if(auth()->user()->google2fa_enabled)
-                    <div class="alert alert-success">
-                        <strong>2FA Enabled</strong> - Your account is protected with two-factor authentication.
+                <!-- 2FA Card -->
+                <div class="card mt-4 shadow-sm">
+                    <div class="card-header bg-white border-0">
+                        <h5 class="mb-0 fw-bold">Two-Factor Authentication</h5>
                     </div>
-                    <p>Enabled on: {{ auth()->user()->google2fa_enabled_at->format('M j, Y g:i A') }}</p>
+                    <div class="card-body">
+                        @if(auth()->user()->google2fa_enabled)
+                        <div class="alert alert-success">
+                            <strong>2FA Enabled</strong> - Your account is protected.
+                        </div>
 
-                    <div class="d-flex gap-2">
-                        <a href="{{ route('2fa.backup-codes') }}" class="btn btn-outline-primary">
-                            View Backup Codes
+                        <p class="mb-3">
+                            Enabled on: {{
+                            auth()->user()->google2fa_enabled_at
+                            ->timezone('Asia/Kathmandu')
+                            ->format('M j, Y g:i A')
+                            }}
+                        </p>
+
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('2fa.backup-codes') }}" class="btn btn-primary w-50">Backup
+                                Codes</a>
+                            <button class="btn btn-warning w-50" data-bs-toggle="modal"
+                                data-bs-target="#disable2faModal">
+                                Disable
+                            </button>
+                        </div>
+
+                        @else
+                        <div class="alert alert-warning">
+                            <strong>2FA Not Enabled</strong> - Enable to secure your account.
+                        </div>
+
+                        <a href="{{ route('2fa.setup') }}" class="btn btn-primary w-100">
+                            Enable 2FA
                         </a>
-                        <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
-                            data-bs-target="#disable2faModal">
-                            Disable 2FA
-                        </button>
+                        @endif
+
                     </div>
-                    @else
-                    <div class="alert alert-warning">
-                        <strong>2FA Not Enabled</strong> - Enhance your account security by enabling two-factor
-                        authentication.
-                    </div>
-                    <a href="{{ route('2fa.setup') }}" class="btn btn-primary">
-                        Enable Two-Factor Authentication
-                    </a>
-                    @endif
                 </div>
             </div>
 
             <!-- Disable 2FA Modal -->
-            <div class="modal fade" id="disable2faModal" tabindex="-1">
+            <div class="modal fade" id="disable2faModal">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -98,13 +107,10 @@
                         <form action="{{ route('2fa.disable') }}" method="POST">
                             @csrf
                             <div class="modal-body">
-                                <p>Are you sure you want to disable two-factor authentication? This will make your
-                                    account less
-                                    secure.</p>
-                                <div class="mb-3">
-                                    <label for="password" class="form-label">Confirm Password</label>
-                                    <input type="password" name="password" class="form-control" required>
-                                </div>
+                                <p>Are you sure you want to disable your two-factor authentication?</p>
+                                <label class="form-label">Confirm Password</label>
+                                <input type="password" placeholder="Confirm Password" name="password"
+                                    class="form-control" required>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
