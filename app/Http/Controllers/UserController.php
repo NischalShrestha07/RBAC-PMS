@@ -191,50 +191,6 @@ class UserController extends Controller
         return view('dashboard.super-admin', compact('notifications', 'departments', 'departmentData', 'menu', 'totalUsers', 'totalDepartments', 'totalRoles', 'activeCommitmentAmount', 'activePdcAmount', 'commitmentTotal', 'pdcTotal', 'overdueCommitmentTotal', 'overduePdcTotal', 'commitmentCount', 'pdcCount', 'agentCount', 'party', 'agents', 'recentCommitments',  'commitments', 'pdcsData', 'totalOverdue', 'departmentAgents'));
     }
 
-
-    public function adminDashboard()
-    {
-        $this->authorize('view dashboard');
-        $this->updateData();
-        $notifications = $this->getNotifications();
-        $menu = $this->getSidebarMenu();
-
-        return view('dashboard.admin', compact('notifications', 'menu'));
-    }
-
-    public function accountantDashboard()
-    {
-        $this->authorize('view dashboard');
-
-        $this->updateData();
-        $notifications = $this->getNotifications();
-        $menu = $this->getSidebarMenu();
-
-        return view('dashboard.accountant', compact('notifications', 'menu'));
-    }
-
-    public function staffDashboard()
-    {
-        $this->authorize('view dashboard');
-
-        $this->updateData();
-        $notifications = $this->getNotifications();
-        $menu = $this->getSidebarMenu();
-
-        return view('dashboard.staff', compact('notifications', 'menu'));
-    }
-
-    public function viewerDashboard()
-    {
-        $this->authorize('view dashboard');
-
-        $this->updateData();
-        $notifications = $this->getNotifications();
-        $menu = $this->getSidebarMenu();
-
-        return view('dashboard.viewer', compact('notifications', 'menu'));
-    }
-
     public function logout()
     {
         Auth::logout();
