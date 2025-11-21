@@ -255,7 +255,6 @@
                             <td>{{ number_format($agent->paid_amount, 2) }}</td>
                             <td>{{ number_format($agent->pending_amount, 2) }}</td>
                             <td>{{ number_format($agent->pending_amount, 2) }}</td>
-                            <td>{{ number_format($agent->department, 2) }}</td>
                         </tr>
                         @endif
 
