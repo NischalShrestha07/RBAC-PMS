@@ -1,4 +1,4 @@
-@extends('layouts.auth-layout')
+@extends('layouts.auth-layout',['page'=>'2FA Setup'])
 
 @section('content')
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
