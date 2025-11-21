@@ -15,6 +15,12 @@ return new class extends Migration
             $table->foreignId('branch_id')->nullable()->constrained('branches')->onDelete('set null');
             $table->foreignId('department_id')->nullable()->constrained('departments')->onDelete('set null');
             $table->boolean('is_active')->default(true);
+
+
+            $table->string('google2fa_secret')->nullable();
+            $table->boolean('google2fa_enabled')->default(false);
+            $table->string('backup_codes')->nullable(); // JSON encoded backup codes
+            $table->timestamp('google2fa_enabled_at')->nullable();
         });
     }
 

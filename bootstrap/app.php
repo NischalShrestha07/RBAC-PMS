@@ -3,6 +3,7 @@
 use App\Http\Middleware\AdminAuthenticate;
 use App\Http\Middleware\AdminRedirect;
 use App\Http\Middleware\CheckRole;
+use App\Http\Middleware\TwoFactorAuth;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -22,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'department.access' => \App\Http\Middleware\CheckDepartmentAccess::class,
             // 'admin.guest' => \App\Http\Middleware\AdminAuthenticate::class,
             'dashboard.access' => \App\Http\Middleware\CheckDashboardAccess::class,
+            '2fa' => TwoFactorAuth::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

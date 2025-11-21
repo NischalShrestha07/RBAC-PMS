@@ -55,6 +55,66 @@
                 </div>
             </div>
 
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>Two-Factor Authentication</h5>
+                </div>
+                <div class="card-body">
+                    @if(auth()->user()->google2fa_enabled)
+                    <div class="alert alert-success">
+                        <strong>2FA Enabled</strong> - Your account is protected with two-factor authentication.
+                    </div>
+                    <p>Enabled on: {{ auth()->user()->google2fa_enabled_at->format('M j, Y g:i A') }}</p>
+
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('2fa.backup-codes') }}" class="btn btn-outline-primary">
+                            View Backup Codes
+                        </a>
+                        <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
+                            data-bs-target="#disable2faModal">
+                            Disable 2FA
+                        </button>
+                    </div>
+                    @else
+                    <div class="alert alert-warning">
+                        <strong>2FA Not Enabled</strong> - Enhance your account security by enabling two-factor
+                        authentication.
+                    </div>
+                    <a href="{{ route('2fa.setup') }}" class="btn btn-primary">
+                        Enable Two-Factor Authentication
+                    </a>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Disable 2FA Modal -->
+            <div class="modal fade" id="disable2faModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Disable Two-Factor Authentication</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <form action="{{ route('2fa.disable') }}" method="POST">
+                            @csrf
+                            <div class="modal-body">
+                                <p>Are you sure you want to disable two-factor authentication? This will make your
+                                    account less
+                                    secure.</p>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Confirm Password</label>
+                                    <input type="password" name="password" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-warning">Disable 2FA</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             <!-- Profile Details -->
             <div class="col-md-9">
                 <div class="card border-0 shadow-lg rounded-3">

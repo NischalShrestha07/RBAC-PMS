@@ -218,10 +218,24 @@ class UserController extends Controller
                 return redirect()->route('login')->with('error', 'Your account is deactivated. Please contact administrator.');
             }
 
-            // Store primary role in session (using Spatie)
+            // Store primary role in session
             $primaryRole = $user->getRoleNames()->first();
             session(['role' => $primaryRole]);
 
+            // Clear any previous 2FA verification
+            Session::forget('2fa_verified');
+
+            // If 2FA is enabled, redirect to verification
+            if ($user->google2fa_enabled) {
+                // Store intended URL if any
+                if (Session::has('url.intended')) {
+                    Session::put('2fa_intended_url', Session::get('url.intended'));
+                }
+                return redirect()->route('2fa.verify');
+            }
+
+            // If no 2FA, proceed to dashboard
+            Session::put('2fa_verified', true);
             return $this->redirectToDashboard();
         }
 
