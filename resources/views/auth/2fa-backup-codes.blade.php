@@ -28,12 +28,12 @@
                         </a>
                         <form action="{{ route('2fa.regenerate-backup-codes') }}" method="POST" class="d-inline">
                             @csrf
-                            <button type="submit" class="btn btn-outline-warning"
+                            <button type="submit" class="btn btn-warning"
                                 onclick="return confirm('Are you sure? This will invalidate all existing backup codes.')">
                                 Regenerate Codes
                             </button>
                         </form>
-                        <a href="{{ route('dashboard.unified') }}" class="btn btn-outline-secondary ms-auto">
+                        <a href="{{ route('dashboard.unified') }}" class="btn btn-secondary ms-auto">
                             Continue to Dashboard
                         </a>
                     </div>

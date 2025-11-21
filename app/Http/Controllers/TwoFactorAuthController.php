@@ -130,7 +130,7 @@ class TwoFactorAuthController extends Controller
         $user = Auth::user();
         $user->disable2fa();
 
-        return redirect()->route('profile.show')
+        return redirect()->back()
             ->with('success', 'Two-factor authentication has been disabled.');
     }
 }
