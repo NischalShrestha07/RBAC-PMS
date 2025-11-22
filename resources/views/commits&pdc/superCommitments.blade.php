@@ -421,139 +421,150 @@
                 vertical-align: middle !important;
             }
         </style>
-        <div class="table-responsive">
-            <table id="commitmentEmployeeTable" class="table table-striped table-bordered text-nowrap text-center">
-                <thead>
-                    <tr class="text-center">
-                        <th>Entry Date</th>
-                        <th>Party</th>
-                        <th>Address</th>
-                        <th>Total Commitment</th>
-                        <th>Installment Amount</th>
-                        {{-- <th>Received Amount</th>
-                        <th>Pending Amount</th> --}}
-                        <th>Commitment Age(Day)</th>
-                        <th>Salesman</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($commitments->whereIn('status',
-                    ['Pending', 'Overdue']) as $item)
-                    <tr class="text-center">
-                        <td>{{ $item->created_at->format('Y-m-d') }}
-                        </td>
-                        <td>{{ $item->client->name ?? 'N/A' }}</td>
-                        <td>{{ $item->client->address ?? 'N/A' }}
-                        </td>
-                        <td>{{ $item->total_amount }}</td>
-                        <td>{{ $item->display_amount ?? 'N/A' }}</td>
-                        {{-- <td>
-                            @php
-                            $partialPayments =
-                            \App\Models\Transactions::where('client_id',
-                            $item->client_id)->where('agent_id',$item->agent_id)->where('pc_id',$item->id)
-                            ->sum('pay_amount');
-                            $totalReceived = $partialPayments;
-                            $totalAmount = $item->total_amount ?? 0;
-                            $totalPending = max($totalAmount -
-                            $totalReceived, 0);
-                            @endphp
-                            {{ number_format($totalReceived, 2) }}
-                        </td>
-                        <td>{{ number_format($totalPending, 2) }}
-                        </td> --}}
-                        <td>
-                            @php
-                            $installment =
-                            $item->installments()->where('status',
-                            '!=',
-                            'Complete')->first();
-                            $isCompleted = !$installment;
-                            $dueDate = $installment?->due_date ?
-                            \Carbon\Carbon::parse($installment->due_date)
-                            : null;
-                            $remainingDays = $dueDate ?
-                            today()->startOfDay()->diffInDays($dueDate,
-                            false) : null;
-                            @endphp
-                            @if ($dueDate)
-                            @if ($remainingDays < 0) Overdue by {{ abs($remainingDays) }} days
-                                @elseif($remainingDays==0) Due Today @else {{ $remainingDays }} days remaining @endif
-                                @else <span class="text-warning">No Due
-                                Date</span>
-                                @endif
-                        </td>
-                        <td>{{ $item->agent->name ?? 'No Agent
-                            Assigned' }}</td>
-                        <td>
-                            <span
-                                class="badge badge-sm @if ($item->status == 'Overdue') bg-danger @else bg-warning @endif"
-                                style="pointer-events: none; cursor: default; padding: 6px 10px; color: white;">
-                                {{ ucfirst($item->status) }}
-                            </span>
-                        </td>
-                        <td class="text-center">
-                            <div class="btn-group">
-                                <a href="{{ route('commitments.edit', $item->id) }}" class="btn text-success"
-                                    title="Edit">
-                                    <i class="fas fa-pencil-alt fa-lg text-success"></i>
-                                </a>
-                                <a href="{{ route('commitments.show', $item->id) }}" class="btn text-primary"
-                                    title="View">
-                                    <i class="fas fa-eye fa-lg text-primary"></i>
-                                </a>
-                                <button type="button" class="btn" title="Delete" data-toggle="modal"
-                                    data-target="#deleteModal{{ $item->id }}">
-                                    <i class="fas fa-lg fa-trash-alt text-danger"></i>
-                                </button>
-                                <div class="modal fade" id="deleteModal{{ $item->id }}" tabindex="-1" role="dialog"
-                                    aria-labelledby="deleteModalLabel{{ $item->id }}" aria-hidden="true">
-                                    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
-                                        <div class="modal-content shadow-lg rounded">
-                                            <div
-                                                class="modal-header d-flex justify-content-between align-items-center gap-3 bg-danger text-white">
-                                                <h5 class="modal-title fw-bold" id="deleteModalLabel{{ $item->id }}">
-                                                    Confirm Deletion
-                                                </h5>
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-dismiss="modal" aria-label="Close">
-                                                </button>
-                                            </div>
-                                            <div class="modal-body text-center">
-                                                <p class="mb-2 fs-5">
-                                                    Are you sure you
-                                                    want to delete
-                                                    this item?</p>
-                                                <p class="text-muted small">
-                                                    This action
-                                                    cannot be
-                                                    undone.</p>
-                                            </div>
-                                            <div class="modal-footer d-flex justify-content-center">
-                                                <button type="button" class="btn btn-secondary px-4 py-2"
-                                                    data-dismiss="modal">
-                                                    Cancel
-                                                </button>
-                                                <form action="{{ route('commitments.destroy', $item->id) }}"
-                                                    method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit"
-                                                        class="btn btn-danger px-4 py-2">Delete</button>
-                                                </form>
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <h5 class="mb-0 fw-semibold">Pending & Overdue Commitments</h5>
+            </div>
+
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table id="commitmentEmployeeTable"
+                        class="table table-hover table-bordered text-center align-middle mb-0">
+
+                        <thead class="table-light sticky-top">
+                            <tr>
+                                <th class="fw-semibold">Entry Date</th>
+                                <th class="fw-semibold">Party</th>
+                                <th class="fw-semibold">Address</th>
+                                <th class="fw-semibold">Total Commitment</th>
+                                <th class="fw-semibold">Installment Amount</th>
+                                <th class="fw-semibold">Commitment Age (Day)</th>
+                                <th class="fw-semibold">Salesman</th>
+                                <th class="fw-semibold">Status</th>
+                                <th class="fw-semibold">Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach ($commitments->whereIn('status',
+                            ['Pending', 'Overdue']) as $item)
+                            <tr class="text-center">
+                                <td>{{ $item->created_at->format('Y-m-d') }}
+                                </td>
+                                <td>{{ $item->client->name ?? 'N/A' }}</td>
+                                <td>{{ $item->client->address ?? 'N/A' }}
+                                </td>
+                                <td>{{ $item->total_amount }}</td>
+                                <td>{{ $item->display_amount ?? 'N/A' }}</td>
+                                {{-- <td>
+                                    @php
+                                    $partialPayments =
+                                    \App\Models\Transactions::where('client_id',
+                                    $item->client_id)->where('agent_id',$item->agent_id)->where('pc_id',$item->id)
+                                    ->sum('pay_amount');
+                                    $totalReceived = $partialPayments;
+                                    $totalAmount = $item->total_amount ?? 0;
+                                    $totalPending = max($totalAmount -
+                                    $totalReceived, 0);
+                                    @endphp
+                                    {{ number_format($totalReceived, 2) }}
+                                </td>
+                                <td>{{ number_format($totalPending, 2) }}
+                                </td> --}}
+                                <td>
+                                    @php
+                                    $installment =
+                                    $item->installments()->where('status',
+                                    '!=',
+                                    'Complete')->first();
+                                    $isCompleted = !$installment;
+                                    $dueDate = $installment?->due_date ?
+                                    \Carbon\Carbon::parse($installment->due_date)
+                                    : null;
+                                    $remainingDays = $dueDate ?
+                                    today()->startOfDay()->diffInDays($dueDate,
+                                    false) : null;
+                                    @endphp
+                                    @if ($dueDate)
+                                    @if ($remainingDays < 0) Overdue by {{ abs($remainingDays) }} days
+                                        @elseif($remainingDays==0) Due Today @else {{ $remainingDays }} days remaining
+                                        @endif @else <span class="text-warning">No Due
+                                        Date</span>
+                                        @endif
+                                </td>
+                                <td>{{ $item->agent->name ?? 'No Agent
+                                    Assigned' }}</td>
+                                <td>
+                                    <span
+                                        class="badge badge-sm @if ($item->status == 'Overdue') bg-danger @else bg-warning @endif"
+                                        style="pointer-events: none; cursor: default; padding: 6px 10px; color: white;">
+                                        {{ ucfirst($item->status) }}
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                        <a href="{{ route('commitments.edit', $item->id) }}" class="btn text-success"
+                                            title="Edit">
+                                            <i class="fas fa-pencil-alt fa-lg text-success"></i>
+                                        </a>
+                                        <a href="{{ route('commitments.show', $item->id) }}" class="btn text-primary"
+                                            title="View">
+                                            <i class="fas fa-eye fa-lg text-primary"></i>
+                                        </a>
+                                        <button type="button" class="btn" title="Delete" data-toggle="modal"
+                                            data-target="#deleteModal{{ $item->id }}">
+                                            <i class="fas fa-lg fa-trash-alt text-danger"></i>
+                                        </button>
+                                        <div class="modal fade" id="deleteModal{{ $item->id }}" tabindex="-1"
+                                            role="dialog" aria-labelledby="deleteModalLabel{{ $item->id }}"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+                                                <div class="modal-content shadow-lg rounded">
+                                                    <div
+                                                        class="modal-header d-flex justify-content-between align-items-center gap-3 bg-danger text-white">
+                                                        <h5 class="modal-title fw-bold"
+                                                            id="deleteModalLabel{{ $item->id }}">
+                                                            Confirm Deletion
+                                                        </h5>
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-dismiss="modal" aria-label="Close">
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body text-center">
+                                                        <p class="mb-2 fs-5">
+                                                            Are you sure you
+                                                            want to delete
+                                                            this item?</p>
+                                                        <p class="text-muted small">
+                                                            This action
+                                                            cannot be
+                                                            undone.</p>
+                                                    </div>
+                                                    <div class="modal-footer d-flex justify-content-center">
+                                                        <button type="button" class="btn btn-secondary px-4 py-2"
+                                                            data-dismiss="modal">
+                                                            Cancel
+                                                        </button>
+                                                        <form action="{{ route('commitments.destroy', $item->id) }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit"
+                                                                class="btn btn-danger px-4 py-2">Delete</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
 
+                    </table>
+                </div>
+            </div>
         </div>
         <div class="mt-4" style="background: white;">
             {{ $commitments->links() }}
