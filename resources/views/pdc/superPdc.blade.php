@@ -426,10 +426,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.19/jspdf.plugin.autotable.min.js">
 </script>
-<div class="card mt-3">
+<div class="card-body card mt-3 shadow-sm border-0">
     <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h5 class="card-title mb-0">Pdcs</h5>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="card-title fw-bold">PDCs</h5>
         </div>
         <style>
             table td {
@@ -437,15 +437,15 @@
             }
         </style>
         <div class="table-responsive">
-            <table id="EmployeeTable" class="table table-bordered table-striped text-center text-nowrap mb-0">
-                <thead>
-                    <tr class="text-center">
+            <table id="EmployeeTable" class="table table-hover table-bordered text-center align-middle">
+                <thead class="table-light">
+                    <tr>
                         <th>Entry Date</th>
-                        <th>Party </th>
+                        <th>Party</th>
                         <th>Address</th>
-                        <th>Total Pdc Amount</th>
+                        <th>Total PDC Amount</th>
                         <th>Installment Amount</th>
-                        <th>Pdc Age</th>
+                        <th>PDC Age</th>
                         <th>Salesman</th>
                         <th>Status</th>
                         @canany(['edit pdcs', 'delete pdcs', 'view pdcs'])
@@ -569,7 +569,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="mt-4" style="background: white;">
+        <div class="mt-4">
             {{ $pdcs->links() }}
         </div>
     </div>
