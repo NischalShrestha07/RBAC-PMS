@@ -16,7 +16,7 @@ class CheckPermission
         }
 
         if (!Auth::user()->can($permission)) {
-            abort(403, 'Unauthorized action. You don\'t have permission to access this resource.');
+            abort(403, "Unauthorized action. You don't have permission to access this resource.");
         }
 
         return $next($request);
