@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('title', 'Log Details')
+@extends('layouts.app',['page'=>'Log Details'])
 
 @section('content')
 <div class="container-fluid">

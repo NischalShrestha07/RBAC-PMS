@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app',['page'=>'Activity Logs'])
 
 @section('title', 'Activity Logs Statistics')
 
