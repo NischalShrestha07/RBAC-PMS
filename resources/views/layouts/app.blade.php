@@ -157,45 +157,49 @@
             </div>
         </nav>
 
+
         <main class="px-4 pb-4 w-100" style="height:100dvh; overflow:auto;">
             <div class="d-flex justify-content-end align-items-center border-bottom position-relative py-3 mb-3">
-                <div class="position-absolute top-50 start-50 translate-middle z-2 m-0">
-                    <img src="{{asset('admincss/img/pms.svg')}}" alt="" style="max-width: 100%;">
-                </div>
-                <div class="d-flex align-items-center gap-3">
-                    <div class="position-relative me-3">
-                        <a href="{{route('notifications.index')}}" class="btn btn-outline-secondary position-relative">
-                            <i class="bi bi-bell fs-5"></i>
-                            <span
-                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                id="notificationBadge">
-                                {{ $notifications['pdcCount'] + $notifications['commitmentCount'] }}
-                            </span>
-                        </a>
+                {{-- <div class="position-absolute top-50 start-50 translate-middle z-2 m-0"> --}}
+                    <div class="position-absolute top-50 start-50 translate-middle z-2 m-0" style="max-width: 100%">
+                        {{-- <img src="{{asset('admincss/img/pms.svg')}}" alt="" style="max-width: 100%;"> --}}
+                        <h2 class="text-align-center">{{$page ?? ''}}</h2>
                     </div>
-                    <div class="dropdown me-3">
-                        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"
-                            id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{{ asset('uploads/images/'.Auth::user()->image) }}" class="rounded-circle me-2"
-                                width="40" height="40" alt="{{Auth::user()->name}}">
-                            <span class="d-none d-sm-inline text-black">{{Auth::user()->name}}</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="{{route('profile.update')}}"><i
-                                        class="bi bi-person me-2"></i>
-                                    Profile</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="{{ route('logout') }}"><i
-                                        class="bi bi-box-arrow-right me-2"></i> Sign
-                                    out</a></li>
-                        </ul>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="position-relative me-3">
+                            <a href="{{route('notifications.index')}}"
+                                class="btn btn-outline-secondary position-relative">
+                                <i class="bi bi-bell fs-5"></i>
+                                <span
+                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                    id="notificationBadge">
+                                    {{ $notifications['pdcCount'] + $notifications['commitmentCount'] }}
+                                </span>
+                            </a>
+                        </div>
+                        <div class="dropdown me-3">
+                            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"
+                                id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="{{ asset('uploads/images/'.Auth::user()->image) }}"
+                                    class="rounded-circle me-2" width="40" height="40" alt="{{Auth::user()->name}}">
+                                <span class="d-none d-sm-inline text-black">{{Auth::user()->name}}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="{{route('profile.update')}}"><i
+                                            class="bi bi-person me-2"></i>
+                                        Profile</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="{{ route('logout') }}"><i
+                                            class="bi bi-box-arrow-right me-2"></i> Sign
+                                        out</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            @yield('content')
+                @yield('content')
         </main>
     </div>
 
