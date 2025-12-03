@@ -6,6 +6,7 @@ use App\Models\Commitment;
 use App\Models\Installment;
 use App\Models\Pdc;
 use App\Models\PdcInstallment;
+use App\Services\ActivityLogger;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -15,6 +16,17 @@ use Illuminate\Support\Facades\Log;
 abstract class Controller
 {
     use AuthorizesRequests, ValidatesRequests;
+    protected function logActivity(
+        string $action,
+        string $description,
+        $model = null,
+        array $oldData = [],
+        array $newData = [],
+        string $status = 'success'
+    ) {
+        return app(ActivityLogger::class)->log($action, $description, $model, $oldData, $newData, $status);
+    }
+
 
     // Check permission using Spatie
     protected function checkPermission($permission)

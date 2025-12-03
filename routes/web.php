@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AgentCommitmentController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\ChequeMenuController;
@@ -449,6 +450,16 @@ Route::middleware('auth')->group(function () {
 
         Route::resource('permissions', PermissionController::class)
             ->middleware(CheckPermission::class . ':manage roles');
+
+
+        // Activity Logs Routes
+        Route::prefix('admin')->group(function () {
+            Route::get('/logs', [ActivityLogController::class, 'index'])->name('logs.index');
+            Route::get('/logs/stats', [ActivityLogController::class, 'stats'])->name('logs.stats');
+            Route::get('/logs/{log}', [ActivityLogController::class, 'show'])->name('logs.show');
+            Route::get('/logs/export', [ActivityLogController::class, 'export'])->name('logs.export');
+            Route::post('/logs/cleanup', [ActivityLogController::class, 'cleanup'])->name('logs.cleanup');
+        });
     });
 });
 
