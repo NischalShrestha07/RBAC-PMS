@@ -157,10 +157,23 @@
             </div>
         </nav>
 
+
         <main class="px-4 pb-4 w-100" style="height:100dvh; overflow:auto;">
             <div class="d-flex justify-content-end align-items-center border-bottom position-relative py-3 mb-3">
-                <div class="position-absolute top-50 start-50 translate-middle z-2 m-0">
+                {{-- <div class="position-absolute top-50 start-50 translate-middle z-2 m-0">
                     <img src="{{asset('admincss/img/pms.svg')}}" alt="" style="max-width: 100%;">
+                    <h4 class="">Payment Management System ({{$page ?? ''}})</h4>
+                </div> --}}
+                <div class="position-absolute top-50 start-50 translate-middle text-center z-2 m-0">
+
+                    <h4 class="fw-semibold text-success"
+                        style="letter-spacing: 0.5px; font-size: 1.35rem; white-space: nowrap;">
+                        Payment Management System
+                        <span class="text-secondary" style="font-weight: 500;">
+                            ({{ $page ?? '' }})
+                        </span>
+                    </h4>
+
                 </div>
                 <div class="d-flex align-items-center gap-3">
                     <div class="position-relative me-3">

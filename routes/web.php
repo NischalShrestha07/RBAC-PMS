@@ -22,29 +22,19 @@ use App\Http\Middleware\CheckPermission;
 use App\Http\Middleware\CheckDepartmentAccess;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| AUTH GUEST ROUTES
-|--------------------------------------------------------------------------
-*/
+
+
 
 Route::group(['middleware' => 'admin.guest'], function () {
     Route::get('/', [UserController::class, 'login'])->name('login');
     Route::post('/login', [UserController::class, 'userLogin'])->name('login.authenticate');
 });
 
-/*
-|--------------------------------------------------------------------------
-| AUTH PROTECTED ROUTES
-|--------------------------------------------------------------------------
-*/
+
+
 Route::middleware('auth')->group(function () {
 
-    /*
-    |--------------------------------------------------------------------------
-    | 2FA SETUP
-    |--------------------------------------------------------------------------
-    */
+
     Route::get('/2fa/setup', [TwoFactorAuthController::class, 'showSetupForm'])->name('2fa.setup');
     Route::post('/2fa/enable', [TwoFactorAuthController::class, 'enable'])->name('2fa.enable');
     Route::get('/2fa/backup-codes', [TwoFactorAuthController::class, 'showBackupCodes'])->name('2fa.backup-codes');
@@ -52,27 +42,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/2fa/regenerate-backup-codes', [TwoFactorAuthController::class, 'regenerateBackupCodes'])->name('2fa.regenerate-backup-codes');
     Route::post('/2fa/disable', [TwoFactorAuthController::class, 'disable'])->name('2fa.disable');
 
-    /*
-    |--------------------------------------------------------------------------
-    | 2FA VERIFICATION
-    |--------------------------------------------------------------------------
-    */
+
     Route::get('/2fa/verify', [TwoFactorVerificationController::class, 'showVerificationForm'])->name('2fa.verify');
     Route::post('/2fa/verify', [TwoFactorVerificationController::class, 'verify'])->name('2fa.verify.post');
     Route::post('/2fa/resend', [TwoFactorVerificationController::class, 'resend'])->name('2fa.resend');
 
-    /*
-    |--------------------------------------------------------------------------
-    | PROTECTED ROUTES AFTER 2FA VERIFICATION
-    |--------------------------------------------------------------------------
-    */
+
     Route::middleware('2fa')->group(function () {
 
-        /*
-        |--------------------------------------------------------------------------
-        | DASHBOARD ROUTES (Unified)
-        |--------------------------------------------------------------------------
-        */
         Route::get('/dashboard', [UserController::class, 'dynamicDashboard'])
             ->name('dashboard.unified')
             ->middleware(CheckDashboardAccess::class);
@@ -81,11 +58,6 @@ Route::middleware('auth')->group(function () {
             ->name('dashboard.redirect');
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | USER MANAGEMENT
-        |--------------------------------------------------------------------------
-        */
         Route::prefix('users')->name('users.')->group(function () {
 
             Route::get('/', [UserController::class, 'index'])
@@ -126,11 +98,6 @@ Route::middleware('auth')->group(function () {
         });
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | DEPARTMENT MANAGEMENT
-        |--------------------------------------------------------------------------
-        */
         Route::prefix('departments')->name('departments.')->group(function () {
 
             Route::get('/', [DepartmentController::class, 'index'])
@@ -167,11 +134,6 @@ Route::middleware('auth')->group(function () {
         });
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | ROLE MANAGEMENT
-        |--------------------------------------------------------------------------
-        */
         Route::prefix('roles')->name('roles.')->group(function () {
 
             Route::get('/', [RoleController::class, 'index'])
@@ -212,11 +174,6 @@ Route::middleware('auth')->group(function () {
         });
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | COMMITMENTS
-        |--------------------------------------------------------------------------
-        */
         Route::prefix('commitments')->group(function () {
 
             Route::get('/', [CommitmentController::class, 'index'])
@@ -257,11 +214,6 @@ Route::middleware('auth')->group(function () {
         });
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | PDC MANAGEMENT
-        |--------------------------------------------------------------------------
-        */
         Route::prefix('pdcs')->group(function () {
 
             Route::get('/', [PdcController::class, 'index'])
@@ -302,11 +254,6 @@ Route::middleware('auth')->group(function () {
         });
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | CLIENT MANAGEMENT
-        |--------------------------------------------------------------------------
-        */
         Route::prefix('clients')->group(function () {
 
             Route::get('/', [ClientController::class, 'index'])
@@ -355,11 +302,6 @@ Route::middleware('auth')->group(function () {
         });
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | PAYMENT ROUTES
-        |--------------------------------------------------------------------------
-        */
         Route::post('installments/pay/{id}', [CommitmentController::class, 'pay'])
             ->name('installments.pay')
             ->middleware(CheckPermission::class . ':create transactions');
@@ -369,11 +311,6 @@ Route::middleware('auth')->group(function () {
             ->middleware(CheckPermission::class . ':create transactions');
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | PROFILE
-        |--------------------------------------------------------------------------
-        */
         Route::get('/profile', [UserController::class, 'showProfile'])
             ->name('view.profile')
             ->middleware(CheckPermission::class . ':view profile');
@@ -387,11 +324,6 @@ Route::middleware('auth')->group(function () {
             ->middleware(CheckPermission::class . ':change password');
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | FOLLOWUPS
-        |--------------------------------------------------------------------------
-        */
         Route::post('commitments/{id}/followup', [CommitmentController::class, 'followup'])
             ->name('commitments.followup')
             ->middleware(CheckPermission::class . ':create followups');
@@ -401,11 +333,6 @@ Route::middleware('auth')->group(function () {
             ->middleware(CheckPermission::class . ':create followups');
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | AGENT / SALESMAN
-        |--------------------------------------------------------------------------
-        */
         Route::prefix('salesman')->group(function () {
 
             Route::get('/', [AgentController::class, 'index'])
@@ -438,21 +365,11 @@ Route::middleware('auth')->group(function () {
         });
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | INSTALLMENTS & PDCs LIST
-        |--------------------------------------------------------------------------
-        */
         Route::get('/installments-pdcs', [InstallmentPdcController::class, 'index'])
             ->name('installments_pdcs.index')
             ->middleware(CheckPermission::class . ':view installments');
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | INSTALLMENT CRUD
-        |--------------------------------------------------------------------------
-        */
         Route::prefix('installments')->group(function () {
 
             Route::get('/', [InstallmentPdcController::class, 'index'])
@@ -485,11 +402,6 @@ Route::middleware('auth')->group(function () {
         });
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | NOTIFICATIONS
-        |--------------------------------------------------------------------------
-        */
         Route::get('/notifications', [NotificationController::class, 'index'])
             ->name('notifications.index')
             ->middleware(CheckPermission::class . ':view notifications');
@@ -503,11 +415,6 @@ Route::middleware('auth')->group(function () {
             ->middleware(CheckPermission::class . ':view notifications');
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | CHEQUE LOCATIONS
-        |--------------------------------------------------------------------------
-        */
         Route::prefix('cheque-locations')->group(function () {
 
             Route::get('/', [ChequeMenuController::class, 'index'])
@@ -540,19 +447,11 @@ Route::middleware('auth')->group(function () {
         });
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | PERMISSIONS RESOURCE
-        |--------------------------------------------------------------------------
-        */
         Route::resource('permissions', PermissionController::class)
             ->middleware(CheckPermission::class . ':manage roles');
     });
 });
 
-/*
-|--------------------------------------------------------------------------
-| LOGOUT ROUTE
-|--------------------------------------------------------------------------
-*/
+
+
 Route::get('/logout', [UserController::class, 'logout'])->name('logout');
