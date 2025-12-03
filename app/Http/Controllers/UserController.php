@@ -11,6 +11,7 @@ use App\Models\Installment;
 use App\Models\Pdc;
 use App\Models\PdcInstallment;
 use App\Models\User;
+use App\Services\ActivityLogger;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -215,6 +216,10 @@ class UserController extends Controller
             // Check if user is active
             if (!$user->is_active) {
                 Auth::logout();
+
+                // Log failed login (inactive account)
+                app(ActivityLogger::class)->logFailedLogin($request->email, 'Account is deactivated');
+
                 return redirect()->route('login')->with('error', 'Your account is deactivated. Please contact administrator.');
             }
 
@@ -222,12 +227,17 @@ class UserController extends Controller
             $primaryRole = $user->getRoleNames()->first();
             session(['role' => $primaryRole]);
 
+            // Log successful login
+            app(ActivityLogger::class)->logLogin($user);
+
+            // Update last login
+            $user->update(['last_login_at' => now()]);
+
             // Clear any previous 2FA verification
             Session::forget('2fa_verified');
 
             // If 2FA is enabled, redirect to verification
             if ($user->google2fa_enabled) {
-                // Store intended URL if any
                 if (Session::has('url.intended')) {
                     Session::put('2fa_intended_url', Session::get('url.intended'));
                 }
@@ -238,6 +248,9 @@ class UserController extends Controller
             Session::put('2fa_verified', true);
             return $this->redirectToDashboard();
         }
+
+        // Log failed login
+        app(ActivityLogger::class)->logFailedLogin($request->email, 'Invalid credentials');
 
         return redirect()->route('login')->with('error', 'Email & Password are incorrect.');
     }

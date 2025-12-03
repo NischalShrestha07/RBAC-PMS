@@ -207,6 +207,9 @@ class CommitmentController extends Controller
         if (!$client_id && $request->new_client) {
             $client = Client::create(['name' => $request->new_client]);
             $client_id = $client->id;
+
+            // Log client creation
+            $this->logActivity('create', "Created new client: {$request->new_client}", $client);
         }
         $pending_amount = $request->total_amount - ($request->paid_amount ?? 0);
 
@@ -263,6 +266,9 @@ class CommitmentController extends Controller
             }
             $commitment->save();
         }
+        // Log commitment creation
+        $this->logActivity('create', "Created commitment for client: {$commitment->name}", $commitment);
+
         $this->updateData();
 
         return redirect()->route('commitments.index')->with('success', 'Commitment created successfully!');
@@ -297,7 +303,11 @@ class CommitmentController extends Controller
             'client_id' => 'required|exists:clients,id',
         ]);
 
-        $commitment = Commitment::findOrFail($id);
+        $commitment = Commitment::with('installments')->findOrFail($id);
+
+        // Store old data for logging
+        $oldData = $commitment->getAttributes();
+        $oldInstallments = $commitment->installments->toArray();
 
         $client_id = $request->input('client_id');
         $name = Client::find($client_id)->name;
@@ -315,6 +325,13 @@ class CommitmentController extends Controller
         // Handle installments
         if ($request->has('installments')) {
             $submittedIds = collect($request->installments)->pluck('id')->filter()->all();
+            $deletedInstallments = $commitment->installments()->whereNotIn('id', $submittedIds)->get();
+
+            // Log deleted installments
+            foreach ($deletedInstallments as $installment) {
+                $this->logActivity('delete', "Deleted installment: {$installment->amount} due {$installment->due_date}", $installment);
+            }
+
             $commitment->installments()->whereNotIn('id', $submittedIds)->delete();
 
             $pending = false;
@@ -329,8 +346,10 @@ class CommitmentController extends Controller
 
                 if (isset($installmentData['id']) && $installment = $commitment->installments()->find($installmentData['id'])) {
                     $installment->update($data);
+                    $this->logActivity('update', "Updated installment: {$installment->amount} due {$installment->due_date}", $installment);
                 } else {
-                    $commitment->installments()->create($data);
+                    $installment = $commitment->installments()->create($data);
+                    $this->logActivity('create', "Created installment: {$installment->amount} due {$installment->due_date}", $installment);
                 }
 
                 if ($data['status'] === 'Pending') $pending = true;
@@ -342,9 +361,19 @@ class CommitmentController extends Controller
             $paidAmount = $commitment->activeInstallments()->sum('paid_amount');
             $commitment->total_amount = $totalAmount;
             $commitment->pending_amount = $totalAmount - $paidAmount;
+
+            $oldStatus = $commitment->getOriginal('status');
             $commitment->status = $overdue ? 'Overdue' : ($pending ? 'Pending' : 'Complete');
             $commitment->save();
+
+            // Log status change if changed
+            if ($oldStatus !== $commitment->status) {
+                $this->logStatusChange($commitment, $oldStatus, $commitment->status);
+            }
         }
+
+        // Log commitment update
+        $this->logActivity('update', "Updated commitment: {$commitment->name}", $commitment);
 
         $this->updateData();
 
@@ -367,15 +396,16 @@ class CommitmentController extends Controller
         $pc_id = $request->pc_id;
 
         if ($request->pay_amount > $remainingAmount) {
+            $this->logActivity('payment', "Failed payment attempt: Amount {$request->pay_amount} exceeds pending {$remainingAmount}", $installment, [], [], 'failed');
             return back()->with('error', 'Payment exceeds pending amount.');
         }
 
-
+        $oldPaidAmount = $installment->paid_amount;
         $installment->paid_amount += $request->pay_amount;
         $installment->status = ($installment->paid_amount >= $installment->amount) ? 'Complete' : 'Pending';
         $installment->save();
 
-        $commitment = new Commitment();
+        $commitment = $installment->commitment;
 
         Transactions::create([
             'pc_id' => $pc_id,
@@ -386,6 +416,15 @@ class CommitmentController extends Controller
             'pay_amount' => $request->pay_amount,
             'login_uid' => Auth::id(),
             'remarks' => $request->remarks,
+        ]);
+
+        // Log payment
+        $this->logActivity('payment', "Payment of {$request->pay_amount} received for installment", $installment, [
+            'paid_amount' => $oldPaidAmount,
+            'status' => $installment->getOriginal('status')
+        ], [
+            'paid_amount' => $installment->paid_amount,
+            'status' => $installment->status
         ]);
 
         return back()->with('success', 'Partial payment recorded successfully.');
@@ -449,6 +488,7 @@ class CommitmentController extends Controller
         $hasPaidInstallments = $commitment->installments->where('paid_amount', '>', 0)->count() > 0;
 
         if ($hasPaidInstallments) {
+            $this->logActivity('failed', "Failed to mark commitment as failed: Some installments have been paid", $commitment, [], [], 'failed');
             return redirect()->back()->with('error', 'Cannot fail commitment: Some installments have been paid.');
         }
 
@@ -461,12 +501,22 @@ class CommitmentController extends Controller
                     'due_date' => $installment->due_date,
                     'status' => 'Failed',
                 ]);
+
+                // Log each failed installment
+                $this->logActivity('failed', "Moved installment to failed: {$installment->amount} due {$installment->due_date}", $installment);
+
                 $installment->delete();
             }
+
+            $oldStatus = $commitment->status;
             $commitment->status = 'Failed';
-            $commitment->total_amount = 0; // Reset total amount
+            $commitment->total_amount = 0;
             $commitment->pending_amount = 0;
             $commitment->save();
+
+            // Log commitment failure
+            $this->logStatusChange($commitment, $oldStatus, 'Failed');
+            $this->logActivity('failed', "Marked commitment as failed", $commitment);
         });
 
         return redirect()->back()->with('success', 'Commitment marked as failed successfully.');

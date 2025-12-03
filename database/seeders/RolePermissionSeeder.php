@@ -107,6 +107,11 @@ class RolePermissionSeeder extends Seeder
             // System
             ['name' => 'manage system settings', 'group' => 'system', 'description' => 'Manage system settings'],
             ['name' => 'access all departments', 'group' => 'system', 'description' => 'Access all departments'],
+
+            // Activity Log permissions
+            ['name' => 'view activity logs', 'group' => 'Logs', 'description' => 'View system activity logs'],
+            ['name' => 'export activity logs', 'group' => 'Logs', 'description' => 'Export activity logs to CSV'],
+            ['name' => 'manage activity logs', 'group' => 'Logs', 'description' => 'Manage and clean up activity logs'],
         ];
 
         foreach ($permissions as $permission) {
@@ -151,6 +156,18 @@ class RolePermissionSeeder extends Seeder
                 'description' => 'Access to department: ' . $department->name
             ]);
         }
+
+        // Add to appropriate roles
+        Role::findByName('Super Admin')->givePermissionTo([
+            'view activity logs',
+            'export activity logs',
+            'manage activity logs',
+        ]);
+
+        // Role::findByName('Admin')->givePermissionTo([
+        //     'view activity logs',
+        //     'export activity logs',
+        // ]);
 
         $this->command->info('✅ Department-specific permissions created');
         $this->command->info('✅ Essential permissions created');

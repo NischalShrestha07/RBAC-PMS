@@ -153,6 +153,19 @@
                         </a>
                     </li>
                     @endif
+
+
+                    @if(Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('Admin'))
+                    <li class="nav-item px-1 py-1">
+                        <a class="nav-link text-nowrap text-black {{ request()->routeIs('logs.index') ? 'active' : '' }}"
+                            href="{{ route('logs.index') }}">
+                            <i class="bi bi-person-gear me-2"></i>
+                            <span>Logs</span>
+                        </a>
+                    </li>
+                    @endif
+
+
                 </ul>
             </div>
         </nav>

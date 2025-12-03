@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Agent extends Model
 {
     use SoftDeletes;  // Enable soft deletes
+    use LogsActivity;
 
     protected $dates = ['deleted_at'];  // Ensure deleted_at is treated as a date
 
