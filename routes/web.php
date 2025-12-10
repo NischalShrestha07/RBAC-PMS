@@ -453,7 +453,7 @@ Route::middleware('auth')->group(function () {
 
 
         // Activity Logs Routes
-        Route::prefix('admin')->group(function () {
+        Route::prefix('/')->group(function () {
             Route::get('/logs', [ActivityLogController::class, 'index'])->name('logs.index');
             Route::get('/logs/stats', [ActivityLogController::class, 'stats'])->name('logs.stats');
             Route::get('/logs/{log}', [ActivityLogController::class, 'show'])->name('logs.show');
