@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="card-title">Log Details</h3>
                     <div class="card-tools">
                         <a href="{{ route('logs.index') }}" class="btn btn-secondary btn-sm">
@@ -37,14 +37,6 @@
                                         @endif
                                     </td>
                                 </tr>
-                                <tr>
-                                    <th>IP Address:</th>
-                                    <td><code>{{ $log->ip_address }}</code></td>
-                                </tr>
-                                <tr>
-                                    <th>User Agent:</th>
-                                    <td><small>{{ $log->user_agent }}</small></td>
-                                </tr>
                             </table>
                         </div>
                         <div class="col-md-6">
@@ -52,7 +44,7 @@
                                 <tr>
                                     <th width="30%">Action:</th>
                                     <td>
-                                        <span class="badge badge-{{ $log->action_color }}">
+                                        <span class="badge text-muted badge-{{ $log->action_color }}">
                                             {{ $log->formatted_action }}
                                         </span>
                                     </td>
@@ -68,18 +60,10 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Route:</th>
-                                    <td><code>{{ $log->route }}</code></td>
-                                </tr>
-                                <tr>
-                                    <th>Method:</th>
-                                    <td><code>{{ $log->method }}</code></td>
-                                </tr>
-                                <tr>
                                     <th>Status:</th>
                                     <td>
                                         <span
-                                            class="badge badge-{{ $log->status == 'success' ? 'success' : ($log->status == 'failed' ? 'danger' : 'warning') }}">
+                                            class="badge bg-{{ $log->status == 'success' ? 'success' : ($log->status == 'failed' ? 'danger' : 'warning') }}">
                                             {{ ucfirst($log->status) }}
                                         </span>
                                     </td>
