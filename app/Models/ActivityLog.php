@@ -77,38 +77,4 @@ class ActivityLog extends Model
 
         return $actions[$this->action] ?? ucfirst($this->action);
     }
-
-    public function getChangesSummaryAttribute()
-    {
-        if (empty($this->changes)) {
-            return 'No changes detected';
-        }
-
-        $changes = [];
-        foreach ($this->changes as $field => $change) {
-            $changes[] = "$field: '{$change['old']}' → '{$change['new']}'";
-        }
-
-        return implode(', ', $changes);
-    }
-
-    public function getActionColorAttribute()
-    {
-        $colors = [
-            'create' => 'success',
-            'update' => 'info',
-            'delete' => 'danger',
-            'login' => 'primary',
-            'logout' => 'secondary',
-            'failed_login' => 'warning',
-            'payment' => 'success',
-            'followup' => 'info',
-            'status_change' => 'warning',
-            'failed' => 'danger',
-            'export' => 'primary',
-            'import' => 'primary',
-        ];
-
-        return $colors[$this->action] ?? 'secondary';
-    }
 }
