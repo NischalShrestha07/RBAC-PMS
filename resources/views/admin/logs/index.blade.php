@@ -13,11 +13,6 @@
                             </h3>
                             <p class="text-muted mb-0 small">Track all system activities and user actions</p>
                         </div>
-                        <div class="btn-group">
-                            <a href="{{ route('logs.stats') }}" class="btn btn-info text-white">
-                                <i class="fas fa-chart-pie mr-1"></i> Statistics
-                            </a>
-                        </div>
                     </div>
                 </div>
 
@@ -91,8 +86,7 @@
                                                 value="{{ request('date_to') }}" placeholder="To">
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label small text-muted mb-1">Search Keywords</label>
+                                    <div class="col-md-6 d-flex justify-content-between align-items-center">
                                         <div class="input-group input-group-sm">
                                             <span class="input-group-text bg-light">
                                                 <i class="fas fa-search"></i>
@@ -100,17 +94,19 @@
                                             <input type="text" name="search" class="form-control"
                                                 placeholder="Search in logs..." value="{{ request('search') }}">
                                         </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="d-flex justify-content-end gap-2 mt-3">
-                                            <button type="submit" class="btn btn-primary btn-sm px-4">
-                                                <i class="fas fa-filter mr-1"></i> Apply Filters
-                                            </button>
-                                            <a href="{{ route('logs.index') }}" class="btn btn-secondary btn-sm px-4">
-                                                <i class="fas fa-redo mr-1"></i> Clear
-                                            </a>
+
+                                        <div class="col-md-6">
+                                            <div class="d-flex justify-content-end gap-2">
+                                                <button type="submit" class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-filter mr-1"></i> Apply Filters
+                                                </button>
+                                                <a href="{{ route('logs.index') }}" class="btn btn-secondary btn-sm">
+                                                    <i class="fas fa-redo mr-1"></i> Clear
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </form>
                         </div>
@@ -133,12 +129,10 @@
                         <table class="table table-hover mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th class="py-3 px-3 border-bottom text-muted small text-uppercase">ID</th>
                                     <th class="py-3 px-3 border-bottom text-muted small text-uppercase">Time</th>
                                     <th class="py-3 px-3 border-bottom text-muted small text-uppercase">User</th>
                                     <th class="py-3 px-3 border-bottom text-muted small text-uppercase">Action</th>
                                     <th class="py-3 px-3 border-bottom text-muted small text-uppercase">Description</th>
-                                    <th class="py-3 px-3 border-bottom text-muted small text-uppercase">IP Address</th>
                                     <th class="py-3 px-3 border-bottom text-muted small text-uppercase">Status</th>
                                     <th class="py-3 px-3 border-bottom text-muted small text-uppercase">Action</th>
                                 </tr>
@@ -146,10 +140,6 @@
                             <tbody>
                                 @forelse($logs as $log)
                                 <tr class="align-middle">
-                                    <td class="px-3 py-2">
-                                        <code
-                                            class="bg-light px-2 py-1 rounded small">{{ Str::limit($log->log_uid, 8) }}</code>
-                                    </td>
                                     <td class="px-3 py-2">
                                         <div class="small">{{ $log->created_at->format('Y-m-d') }}</div>
                                         <div class="text-muted smaller">{{ $log->created_at->format('H:i:s') }}</div>
@@ -203,9 +193,6 @@
                                             title="{{ $log->description }}">
                                             {{ $log->description }}
                                         </div>
-                                    </td>
-                                    <td class="px-3 py-2">
-                                        <code class="bg-light px-2 py-1 rounded small">{{ $log->ip_address }}</code>
                                     </td>
                                     <td class="px-3 py-2">
                                         @php
