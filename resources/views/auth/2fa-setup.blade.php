@@ -5,7 +5,6 @@
     <div class="col-lg-9 col-md-8 col-sm-10 p-5 bg-white rounded-4 shadow-lg border">
         <div class="text-center mb-4">
             <h1 class="fw-bold fs-1">Enable Two-Factor Authentication</h1>
-            <p class="text-muted">Secure your account with 2FA</p>
         </div>
 
         @if (session('error'))
@@ -55,12 +54,6 @@
                 <a href="{{ route('dashboard.unified') }}" class="btn btn-outline-secondary rounded-3">Cancel</a>
             </div>
         </form>
-
-        <div class="mt-4 text-center">
-            <p class="small text-muted mb-0">
-                <strong>Recommended Apps:</strong> Google Authenticator, Authy, Microsoft Authenticator
-            </p>
-        </div>
     </div>
 </div>
 

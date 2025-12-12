@@ -54,7 +54,7 @@ class ActivityLogController extends Controller
             });
         }
 
-        $logs = $query->paginate(50);
+        $logs = $query->paginate(10);
 
         $users = User::whereIn('id', ActivityLog::distinct()->pluck('user_id'))->get();
         $actions = ActivityLog::distinct()->pluck('action');
@@ -81,40 +81,6 @@ class ActivityLogController extends Controller
         $notifications = $this->getNotifications();
 
         return view('admin.logs.show', compact('log', 'notifications'));
-    }
-
-    public function stats()
-    {
-        $this->authorize('view activity logs');
-
-        $stats = [
-            'total_logs' => ActivityLog::count(),
-            'today_logs' => ActivityLog::whereDate('created_at', today())->count(),
-            'top_users' => ActivityLog::select('user_id', DB::raw('count(*) as total'))
-                ->with('user')
-                ->whereNotNull('user_id')
-                ->groupBy('user_id')
-                ->orderBy('total', 'desc')
-                ->take(10)
-                ->get(),
-            'recent_activities' => ActivityLog::with('user')
-                ->latest()
-                ->take(20)
-                ->get(),
-            'actions_distribution' => ActivityLog::select('action', DB::raw('count(*) as total'))
-                ->groupBy('action')
-                ->orderBy('total', 'desc')
-                ->get(),
-            'models_distribution' => ActivityLog::select('model_type', DB::raw('count(*) as total'))
-                ->whereNotNull('model_type')
-                ->groupBy('model_type')
-                ->orderBy('total', 'desc')
-                ->get(),
-        ];
-
-        $notifications = $this->getNotifications();
-
-        return view('admin.logs.stats', compact('stats', 'notifications'));
     }
 
     public function export(Request $request)
