@@ -456,8 +456,6 @@ Route::middleware('auth')->group(function () {
         Route::prefix('/')->group(function () {
             Route::get('/logs', [ActivityLogController::class, 'index'])->name('logs.index');
             Route::get('/logs/{log}', [ActivityLogController::class, 'show'])->name('logs.show');
-            Route::get('/logs/export', [ActivityLogController::class, 'export'])->name('logs.export');
-            Route::post('/logs/cleanup', [ActivityLogController::class, 'cleanup'])->name('logs.cleanup');
         });
     });
 });

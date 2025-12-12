@@ -101,7 +101,7 @@
                                                     <i class="fas fa-filter mr-1"></i> Apply Filters
                                                 </button>
                                                 <a href="{{ route('logs.index') }}" class="btn btn-secondary btn-sm">
-                                                    <i class="fas fa-redo mr-1"></i> Clear
+                                                    <i class="fas fa-redo mr-1"></i> Reset
                                                 </a>
                                             </div>
                                         </div>
