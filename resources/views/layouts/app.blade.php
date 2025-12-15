@@ -154,6 +154,15 @@
                     </li>
                     @endif
 
+                    {{-- For Permission CRUD
+                    @if(Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('Admin'))
+                    <li class="nav-item px-1 py-1">
+                        <a class="nav-link text-nowrap text-black {{ request()->routeIs('permissions.index') ? 'active' : '' }}"
+                            href="{{ route('permissions.index') }}">
+                            <i class="bi bi-shield-lock me-2"></i> <span>Manage Permissions</span>
+                        </a>
+                    </li>
+                    @endif --}}
 
                     @if(Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('Admin'))
                     <li class="nav-item px-1 py-1">
