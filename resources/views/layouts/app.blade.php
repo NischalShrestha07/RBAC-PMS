@@ -11,6 +11,11 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
     <link rel="icon" href="{{asset('admincss/img/pms.ico')}}" type="image/png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <!-- Local Bootstrap CSS -->
+    <link href="{{ asset('assets/vendor/css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- Local Bootstrap Icons -->
+    <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.min.css') }}" rel="stylesheet">
     <style>
         #sidebarMenu.collapsed .profile-wrapper img {
             width: 50px !important;
@@ -237,6 +242,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
+    <!-- Local jQuery -->
+    <script src="{{ asset('assets/vendor/js/jquery-3.6.0.min.js') }}"></script>
+
+    <!-- Local Bootstrap JS Bundle -->
+    <script src="{{ asset('assets/vendor/js/bootstrap.bundle.min.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const sidebar = document.getElementById('sidebarMenu');

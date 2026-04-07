@@ -31,7 +31,7 @@ class TwoFactorVerificationController extends Controller
         $request->validate([
             'code' => 'required|string',
         ]);
-
+        // return $request;
         $user = Auth::user();
 
         // Check if it's a backup code
